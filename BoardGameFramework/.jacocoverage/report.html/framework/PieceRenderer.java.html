@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PieceRenderer.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">framework</a> &gt; <span class="el_source">PieceRenderer.java</span></div><h1>PieceRenderer.java</h1><pre class="source lang-java linenums">
+package framework;
+
+import hurkle.HurkleEnum;
+import pawns.PawnsEnum;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.table.DefaultTableCellRenderer;
+
+/**
+ * Sets the icons for a JTable based upon
+ * @author BrianGouldsberry
+ */
+public class PieceRenderer extends DefaultTableCellRenderer
+{
+    private Map&lt;BoardSpot, ImageIcon&gt; images;
+    private String game;
+    
+    /**
+     * Sets up the renderer and uses the Default skin
+     * @param game name of the game being used
+     */
+    public PieceRenderer(String game)
+    { 
+<span class="nc" id="L32">        super(); </span>
+<span class="nc" id="L33">        this.game = game;</span>
+<span class="nc" id="L34">        changeTheme(&quot;Default&quot;);</span>
+            
+<span class="nc" id="L36">    }</span>
+    
+    /**
+     * Changes the theme of the table by changing the image icons
+     * @param theme the name of the theme directory to use
+     */
+    public void changeTheme(String theme)
+    {
+        try
+        {
+<span class="nc" id="L46">            Class enums = Class.forName(game.toLowerCase() + &quot;.&quot; + game</span>
+                    + &quot;Enum&quot;);
+<span class="nc" id="L48">            Method method = enums.getMethod(&quot;values&quot;, null);</span>
+<span class="nc" id="L49">            images = new HashMap&lt;BoardSpot, ImageIcon&gt;();</span>
+            //CONNECT each enum value to the image that matches its name
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            for (BoardSpot spot : (BoardSpot[])method.invoke(null))</span>
+            {
+<span class="nc" id="L53">                ImageIcon icon = new ImageIcon(&quot;images/&quot; + game +</span>
+                        &quot;/&quot; + theme + &quot;/&quot; + spot.toString() + &quot;.jpg&quot;);
+<span class="nc" id="L55">                images.put(spot, icon);</span>
+            }
+        } 
+<span class="nc" id="L58">        catch (NoSuchMethodException ex) </span>
+        {
+<span class="nc" id="L60">            Logger.getLogger(PieceRenderer.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+        } 
+<span class="nc" id="L63">        catch (SecurityException ex) </span>
+        {
+<span class="nc" id="L65">            Logger.getLogger(PieceRenderer.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+        } 
+<span class="nc" id="L68">        catch (ClassNotFoundException ex) </span>
+        {
+<span class="nc" id="L70">            Logger.getLogger(PieceRenderer.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+        } 
+<span class="nc" id="L73">        catch (IllegalAccessException ex) </span>
+        {
+<span class="nc" id="L75">            Logger.getLogger(PieceRenderer.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+        } 
+<span class="nc" id="L78">        catch (IllegalArgumentException ex) </span>
+        {
+<span class="nc" id="L80">            Logger.getLogger(PieceRenderer.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+        } 
+<span class="nc" id="L83">        catch (InvocationTargetException ex) </span>
+        {
+<span class="nc" id="L85">            Logger.getLogger(PieceRenderer.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+<span class="nc" id="L87">        }</span>
+<span class="nc" id="L88">    }</span>
+
+    /**
+     * Sets the cell to image matching the value
+     * @param value BoardSpot enum matching an image icon
+     */
+    public void setValue(Object value) 
+    {
+<span class="nc" id="L96">        BoardSpot spot = (BoardSpot) value;</span>
+<span class="nc" id="L97">        setIcon(images.get(spot));</span>
+<span class="nc" id="L98">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

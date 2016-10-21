@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GameConsole.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">framework</a> &gt; <span class="el_source">GameConsole.java</span></div><h1>GameConsole.java</h1><pre class="source lang-java linenums">
+package framework;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Observable;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JTable;
+import org.ini4j.Ini;
+import org.ini4j.Profile;
+
+/**
+ * The console UI equivalent to GameGUIView
+ * @author BrianGouldsberry
+ */
+public class GameConsole implements GameView
+{
+    protected ActionListener listener;
+<span class="nc" id="L27">    private String game, preferences = &quot;&quot;;</span>
+    private GameModel model;
+    private HashMap&lt;String, String&gt; actionCommands;
+    
+    /**
+     * Sets up the consoles parameters and loads the games preferences into the
+     * map of action commands
+     * @param listener the action listener to pass commands to
+     * @param game String representing which game the framework should load
+     * @param model the model to be used to validate moves
+     */
+    public GameConsole(ActionListener listener, String game, GameModel model)
+<span class="nc" id="L39">    {</span>
+<span class="nc" id="L40">        this.listener = listener;</span>
+<span class="nc" id="L41">        this.game = game;</span>
+<span class="nc" id="L42">        this.model = model;</span>
+<span class="nc" id="L43">        actionCommands = new HashMap&lt;String, String&gt;();</span>
+<span class="nc" id="L44">        actionCommands.put(&quot;1&quot;, &quot;New Game&quot;);</span>
+<span class="nc" id="L45">        actionCommands.put(&quot;3&quot;, &quot;Quit&quot;);</span>
+<span class="nc" id="L46">        loadPreferences();</span>
+
+<span class="nc" id="L48">    }</span>
+    
+    /**
+     * Calls update and prints out the contents of the model if true
+     * @param state whether or not to update
+     */
+    @Override
+    public void setVisible(boolean state) 
+    {
+        //UPDATE if true
+        if (true)
+        {
+<span class="nc" id="L60">            update(model, null);</span>
+        }
+<span class="nc" id="L62">    }</span>
+
+    /**
+     * The console doesn't use a controller, so this does nothing
+     * @param cont the game controller
+     */
+    @Override
+    public void setController(GameController cont) 
+    {
+<span class="nc" id="L71">    }</span>
+
+    /**
+     * Prints out the game board as well as status and preferences menu and then
+     * waits for a response. 
+     * @param obs the model
+     * @param obj not used
+     */
+    @Override
+    public void update(Observable obs, Object obj) 
+    {
+        //PRINT if theres a game model
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (obs instanceof GameModel)</span>
+        {
+<span class="nc" id="L85">            GameModel gamemodel = (GameModel) obs;</span>
+<span class="nc" id="L86">            System.out.println(&quot;-------&quot; + game + &quot;-------&quot;);</span>
+<span class="nc" id="L87">            System.out.println(gamemodel.getStatus());</span>
+<span class="nc" id="L88">            BoardSpot[][] board = gamemodel.getTableModel().getBoard();</span>
+<span class="nc" id="L89">            String border = &quot;   &quot;;</span>
+            //PRINT out the column numbers
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            for (int colNum = 0; colNum &lt; board.length; colNum++)</span>
+            {
+<span class="nc" id="L93">                border += colNum + &quot; &quot;;</span>
+            }
+<span class="nc" id="L95">            System.out.println(border);</span>
+<span class="nc" id="L96">            char rowChar = 'A';</span>
+            //PRINT out the ascii values of the board as well as column values
+<span class="nc bnc" id="L98" title="All 2 branches missed.">            for (BoardSpot[] row : board)</span>
+            {
+<span class="nc" id="L100">                System.out.print(rowChar++ + &quot;: &quot;);</span>
+                //PRINT out ascii values
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                for (BoardSpot spot: row)</span>
+                {
+<span class="nc" id="L104">                    System.out.print(spot.toAscii() + &quot; &quot;);</span>
+                }
+<span class="nc" id="L106">                System.out.println();</span>
+            }
+<span class="nc" id="L108">            System.out.println(&quot;1)New 2)Prefs 3)Quit &quot;);</span>
+<span class="nc" id="L109">            Scanner scan = new Scanner(System.in);</span>
+<span class="nc" id="L110">            String input = scan.nextLine();</span>
+            //IF input is a move, then validate it
+<span class="nc bnc" id="L112" title="All 2 branches missed.">            if (input.length() &gt; 1)</span>
+            {
+<span class="nc" id="L114">                gamemodel.validateMove(input.charAt(0) - 'A',</span>
+                        input.charAt(1) - '0', true);
+            }
+            //ELSE perform an action from the menu
+            else
+            {
+                //PRINT out preferences menu and get a second input
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                if (input.equals(&quot;2&quot;))</span>
+                {
+<span class="nc" id="L123">                    System.out.println(preferences);</span>
+<span class="nc" id="L124">                    input = scan.nextLine();</span>
+                }
+<span class="nc" id="L126">                ActionEvent event = new ActionEvent(&quot;blah&quot;, 0,</span>
+                        actionCommands.get(input));
+<span class="nc" id="L128">                listener.actionPerformed(event);</span>
+            }
+        }
+<span class="nc" id="L131">    }</span>
+
+    /**
+     * Sets the preferences menu string and also sets up the hashmap of input to
+     * action commands
+     */
+    @Override
+    public void loadPreferences() 
+    {
+        try 
+        {
+<span class="nc" id="L142">            char inputVal = 'A';</span>
+<span class="nc" id="L143">            Ini ini = new Ini(new File(&quot;config/&quot; + game + &quot;.ini&quot;));</span>
+            //FOR each section
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            for (String sectionName: ini.keySet()) </span>
+            {
+<span class="nc" id="L147">                Profile.Section section = ini.get(sectionName);</span>
+                //ADD the section and option to preferences along with the map
+<span class="nc bnc" id="L149" title="All 2 branches missed.">                for (String optionKey: section.keySet()) </span>
+                {
+<span class="nc" id="L151">                    preferences += inputVal + &quot;)&quot; + sectionName + &quot;-&quot; + </span>
+                            optionKey + &quot; &quot;;
+<span class="nc" id="L153">                    actionCommands.put(inputVal + &quot;&quot;, sectionName + &quot;-&quot; + </span>
+                            optionKey);
+<span class="nc" id="L155">                    inputVal += 1;</span>
+<span class="nc" id="L156">                }</span>
+<span class="nc" id="L157">            }</span>
+        } 
+<span class="nc" id="L159">        catch (IOException ex) </span>
+        {
+<span class="nc" id="L161">            Logger.getLogger(GameGUIView.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">    }</span>
+
+    /**
+     * Invalid for console
+     */
+    @Override
+    public void setUpBoard() 
+    {
+       
+<span class="nc" id="L172">    }</span>
+
+    /**
+     * Returns the JTable associated with the view
+     * @return null because there is no table
+     */
+    @Override
+    public JTable getTable() 
+    {
+<span class="nc" id="L181">        return null;</span>
+    }
+
+    
+    /**
+     * Sets the action listener for the console
+     * @param listener actionListener to use
+     */
+    @Override
+    public void setListener(ActionListener listener) 
+    {
+<span class="nc" id="L192">        this.listener = listener;</span>
+<span class="nc" id="L193">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

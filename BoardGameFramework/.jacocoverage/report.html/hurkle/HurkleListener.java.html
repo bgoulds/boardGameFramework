@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>HurkleListener.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">hurkle</a> &gt; <span class="el_source">HurkleListener.java</span></div><h1>HurkleListener.java</h1><pre class="source lang-java linenums">
+package hurkle;
+
+import framework.GameModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * Listener for Hurkle Menu Actions
+ * @author BrianGouldsberry
+ */
+public class HurkleListener implements ActionListener
+{
+<span class="fc" id="L14">    private final int k_SMALL = 5, k_MEDIUM = 9, k_LARGE = 11;</span>
+    
+    private GameModel model;
+    
+    /**
+     * Creates a new listener and sets the model
+     * @param model the game model that represents the UI
+     */
+    public HurkleListener(GameModel model)
+<span class="fc" id="L23">    {</span>
+<span class="fc" id="L24">        this.model = model;</span>
+<span class="fc" id="L25">    }</span>
+
+    /**
+     * Modifies the model based upon the action command, supported actions:
+     * Quit, New Game, Board Size-Small, Board Size-Medium, Board Size-Large,
+     * Skin-Default, Skin-Classic, Skin-Night, Cheat-Cheat
+     * @param e the event found
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) 
+    {
+<span class="fc" id="L36">        String command = e.getActionCommand();</span>
+//        HurkleTableModel tm = (HurkleTableModel) model.getTableModel();
+        //Performs actions based upon the actionCommand
+<span class="pc bpc" id="L39" title="14 of 38 branches missed.">        switch (command)</span>
+        {
+            case &quot;Quit&quot;: 
+<span class="nc" id="L42">                System.exit(1);</span>
+<span class="nc" id="L43">                break;</span>
+            case &quot;New Game&quot;:
+<span class="fc" id="L45">                model.getTableModel().newGame();</span>
+<span class="fc" id="L46">                break;</span>
+            case &quot;Board Size-Small&quot;:
+<span class="fc" id="L48">                model.getTableModel().setSize(k_SMALL);</span>
+<span class="fc" id="L49">                model.getTableModel().newGame();</span>
+<span class="fc" id="L50">                break;</span>
+            case &quot;Board Size-Medium&quot;:
+<span class="fc" id="L52">                model.getTableModel().setSize(k_MEDIUM);</span>
+<span class="fc" id="L53">                model.getTableModel().newGame();</span>
+<span class="fc" id="L54">                break;</span>
+            case &quot;Board Size-Large&quot;:
+<span class="fc" id="L56">                model.getTableModel().setSize(k_LARGE);</span>
+<span class="fc" id="L57">                model.getTableModel().newGame();</span>
+<span class="fc" id="L58">                break;</span>
+            case &quot;Skin-Default&quot;:
+<span class="fc" id="L60">                model.changeTheme(&quot;Default&quot;);</span>
+<span class="fc" id="L61">                model.getTableModel().newGame();</span>
+<span class="fc" id="L62">                break;</span>
+            case &quot;Skin-Classic&quot;:
+<span class="fc" id="L64">                model.changeTheme(&quot;Classic&quot;);</span>
+<span class="fc" id="L65">                model.getTableModel().newGame();</span>
+<span class="fc" id="L66">                break;</span>
+            case &quot;Skin-Night&quot;:
+<span class="fc" id="L68">                model.changeTheme(&quot;Night&quot;);</span>
+<span class="fc" id="L69">                model.getTableModel().newGame();</span>
+<span class="fc" id="L70">                break;</span>
+            case &quot;Cheat-Cheat&quot;:
+<span class="fc" id="L72">                model.getTableModel().newGame();</span>
+<span class="fc" id="L73">                ((HurkleTableModel)model.getTableModel()).setHurkle(1, 1);</span>
+<span class="fc" id="L74">                break;</span>
+            default:
+                break;
+        }
+<span class="fc" id="L78">        model.notifyObservers();</span>
+<span class="fc" id="L79">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

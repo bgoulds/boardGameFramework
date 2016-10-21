@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PawnsTableModel.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">pawns</a> &gt; <span class="el_source">PawnsTableModel.java</span></div><h1>PawnsTableModel.java</h1><pre class="source lang-java linenums">
+package pawns;
+
+import framework.BoardSpot;
+import framework.GameTableModel;
+import java.util.Arrays;
+
+/**
+ * The table model to be used to represent the game board
+ * @author BrianGouldsberry
+ */
+public class PawnsTableModel extends GameTableModel
+{
+<span class="fc" id="L14">    private final int k_SMALL = 5, k_MEDIUM = 8, k_LARGE = 10;</span>
+<span class="fc" id="L15">    private int size = k_MEDIUM, blackScore = 0, whiteScore = 0;</span>
+    private BoardSpot[][] undo;
+    
+    /**
+     * Starts a new game 
+     */
+    public PawnsTableModel()
+<span class="fc" id="L22">    {</span>
+<span class="fc" id="L23">        newGame();</span>
+<span class="fc" id="L24">    }</span>
+    
+    /**
+     * Sets the board size if the input is valid
+     * @param size the desired 
+     */
+    public void setSize(int size)
+    {
+        //IF its a valid size then set the size, else default to medium
+<span class="fc bfc" id="L33" title="All 6 branches covered.">        if (size == k_SMALL || size == k_MEDIUM || size == k_LARGE)</span>
+        {
+<span class="fc" id="L35">            this.size = size;</span>
+        }
+        else
+        {
+<span class="fc" id="L39">            this.size = k_MEDIUM;</span>
+        }
+<span class="fc" id="L41">    }</span>
+    
+    /**
+     * modifies the board based upon the cell chosen
+     * @param row the numerical row
+     * @param column the numerical column
+     * @param leftClick whether or not there was a left click
+     * @return the status to be displayed
+     */
+    @Override
+    public String validateMove(int row, int column, boolean leftClick) 
+    {
+<span class="fc" id="L53">        String status = &quot;&quot;;</span>
+<span class="fc" id="L54">        int direction = 1;</span>
+        
+        //IF left then direction should look left on the array
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (leftClick)</span>
+        {
+<span class="fc" id="L59">            direction = -1;</span>
+        }
+        //IF the spot is a black piece
+<span class="fc bfc" id="L62" title="All 2 branches covered.">        if (board[row][column] == PawnsEnum.BLACK)</span>
+        {
+<span class="fc" id="L64">            undo = copyBoard();</span>
+            //IF the spot diagonal is in play and an opponent then capture it
+<span class="fc bfc" id="L66" title="All 4 branches covered.">            if (inBounds(row + 1, column + direction) &amp;&amp;</span>
+                    board[row + 1][column + direction] == PawnsEnum.WHITE)
+            {
+<span class="fc" id="L69">                board[row + 1][column + direction] = PawnsEnum.BLACK;</span>
+<span class="fc" id="L70">                board[row][column] = PawnsEnum.NONE;</span>
+<span class="fc" id="L71">                blackScore++;</span>
+            }
+            //ELSE if clear then move forward
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">            else if (inBounds(row + 1, column) &amp;&amp; </span>
+                    board[row + 1][column] == PawnsEnum.NONE)
+            {
+<span class="fc" id="L77">                board[row + 1][column] = PawnsEnum.BLACK;</span>
+<span class="fc" id="L78">                board[row][column] = PawnsEnum.NONE;</span>
+            }
+        }
+        //IF the spot is a white piece
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        else if (board[row][column] == PawnsEnum.WHITE)</span>
+        {
+<span class="fc" id="L84">            undo = copyBoard();</span>
+            //IF the spot diagonal is in play and an opponent then capture it
+<span class="fc bfc" id="L86" title="All 4 branches covered.">            if (inBounds(row - 1, column + direction) &amp;&amp; </span>
+                    board[row - 1][column + direction] == PawnsEnum.BLACK)
+            {
+<span class="fc" id="L89">                board[row - 1][column + direction] = PawnsEnum.WHITE;</span>
+<span class="fc" id="L90">                board[row][column] = PawnsEnum.NONE;</span>
+<span class="fc" id="L91">                whiteScore++;</span>
+            }
+            //ELSE if clear then move forward
+<span class="pc bpc" id="L94" title="2 of 4 branches missed.">            else if (inBounds(row - 1, column) &amp;&amp;</span>
+                    board[row - 1][column] == PawnsEnum.NONE)
+            {
+<span class="fc" id="L97">                board[row - 1][column] = PawnsEnum.WHITE;</span>
+<span class="fc" id="L98">                board[row][column] = PawnsEnum.NONE;</span>
+            }
+        }
+        //IF game over then change the status
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (gameOver() != null)</span>
+        {
+<span class="fc" id="L104">            status = gameOver();</span>
+        }
+        else 
+        {
+<span class="fc" id="L108">            status = &quot;Black: &quot; + blackScore + &quot; | White: &quot; + whiteScore;</span>
+        }
+<span class="fc" id="L110">        this.fireTableDataChanged();</span>
+<span class="fc" id="L111">        return status;</span>
+    }
+    
+    /**
+     * Determines if the game is done
+     * @return null if game is done, if not then &quot;[Team] Wins!&quot; 
+     */
+    private String gameOver()
+    {
+<span class="fc" id="L120">        String result = null;</span>
+<span class="fc" id="L121">        boolean whiteExists = false, blackExists = true;</span>
+        //CHECK the first row
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (BoardSpot spot : board[0])</span>
+        {
+            //IF a pawn is there then they won
+<span class="pc bpc" id="L126" title="2 of 4 branches missed.">            if (spot == PawnsEnum.WHITE || whiteScore == size)</span>
+            {
+<span class="nc" id="L128">                result = &quot;White Wins!&quot;;</span>
+            }
+        }
+        //CHECK the last row
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        for (BoardSpot spot : board[size - 1])</span>
+        {
+            //IF a pawn is there then they won
+<span class="pc bpc" id="L135" title="1 of 4 branches missed.">            if (spot == PawnsEnum.BLACK || blackScore == size)</span>
+            {
+<span class="fc" id="L137">                result = &quot;Black Wins!&quot;;</span>
+            }
+        }
+<span class="fc" id="L140">        return result;</span>
+    }
+    
+    /**
+     * returns the board to its previous state
+     */
+    public void undo()
+    {
+<span class="fc" id="L148">        board = undo;</span>
+<span class="fc" id="L149">        this.fireTableDataChanged();</span>
+<span class="fc" id="L150">    }</span>
+   
+    private boolean inBounds(int row, int column)
+    {
+<span class="pc bpc" id="L154" title="3 of 8 branches missed.">        return (row &gt;= 0 &amp;&amp; row &lt; size) &amp;&amp; (column &gt;= 0 &amp;&amp; column &lt; size);</span>
+    }
+
+    /**
+     * initializes the game with two rows of pawns, each one row from the top 
+     * and bottom
+     */
+    @Override
+    public void newGame() 
+    {
+<span class="fc" id="L164">        board = new PawnsEnum[size][size];</span>
+        //FOR each row
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        for (int row = 0; row &lt; size; row++)</span>
+        {
+            //FOR each column
+<span class="fc bfc" id="L169" title="All 2 branches covered.">            for (int column = 0; column &lt; size; column++)</span>
+            {
+                //SET to black if 2nd row
+<span class="fc bfc" id="L172" title="All 2 branches covered.">                if (row == 1)</span>
+                {
+<span class="fc" id="L174">                    board[row][column] = PawnsEnum.BLACK;</span>
+                }
+                //SET to white if 2nd to last row
+<span class="fc bfc" id="L177" title="All 2 branches covered.">                else if (row == size - 2)</span>
+                {
+<span class="fc" id="L179">                    board[row][column] = PawnsEnum.WHITE;</span>
+                }
+                else
+                {
+<span class="fc" id="L183">                    board[row][column] = PawnsEnum.NONE;</span>
+                }
+            }
+        }
+<span class="fc" id="L187">        whiteScore = 0;</span>
+<span class="fc" id="L188">        blackScore = 0;</span>
+<span class="fc" id="L189">        columnNames = new String[size];</span>
+        //MAKE column names blank
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        for (String column : columnNames)</span>
+        {
+<span class="fc" id="L193">            column = &quot;&quot;;</span>
+        }
+
+<span class="fc" id="L196">        this.fireTableChanged(null);</span>
+<span class="fc" id="L197">    }</span>
+     
+    /**
+     * Returns the name of the enum class being used
+     * @param c the column number
+     * @return PawnsEnum.class
+     */
+    public Class getColumnClass(int c)
+    {
+<span class="fc" id="L206">        return PawnsEnum.class;</span>
+    }
+    
+    private BoardSpot[][] copyBoard()
+    {
+<span class="fc" id="L211">        BoardSpot[][] copy = new BoardSpot[size][size];</span>
+        //FOR each row
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        for (int row = 0; row &lt; size; row++)</span>
+        {
+            //FOR each column, copy the spot into the copy array
+<span class="fc bfc" id="L216" title="All 2 branches covered.">            for (int col = 0; col &lt; size; col++)</span>
+            {
+<span class="fc" id="L218">                copy[row][col] = board[row][col];</span>
+            }
+        }
+<span class="fc" id="L221">        return copy;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

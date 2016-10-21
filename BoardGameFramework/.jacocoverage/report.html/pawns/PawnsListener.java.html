@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PawnsListener.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">pawns</a> &gt; <span class="el_source">PawnsListener.java</span></div><h1>PawnsListener.java</h1><pre class="source lang-java linenums">
+package pawns;
+
+import framework.GameModel;
+import hurkle.HurkleTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+/**
+ * Action Listener to perform menu actions for pawns
+ * @author BrianGouldsberry
+ */
+public class PawnsListener implements ActionListener
+{
+<span class="fc" id="L15">    private final int k_SMALL = 5, k_MEDIUM = 8, k_LARGE = 10;</span>
+    
+    private GameModel model;
+    
+    /**
+     * makes a new pawnsListener with the given model
+     * @param model model to manipulate
+     */
+    public PawnsListener(GameModel model)
+<span class="fc" id="L24">    {</span>
+<span class="fc" id="L25">        this.model = model;</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * Modifies the model based upon the action command, supported actions:
+     * Quit, New Game, Board Size-Small, Board Size-Medium, Board Size-Large,
+     * Skin-Default, Skin-Classic, Skin-Night, Undo-Undo
+     * @param e the event found
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) 
+    {
+<span class="fc" id="L37">        String command = e.getActionCommand();</span>
+//        PawnsTableModel model.getTableModel() = (PawnsTableModel) model.getTableModel();
+        //Performs actions based upon the actionCommand
+<span class="pc bpc" id="L40" title="14 of 38 branches missed.">        switch (command)</span>
+        {
+            case &quot;Quit&quot;: 
+<span class="nc" id="L43">                System.exit(1);</span>
+<span class="nc" id="L44">                break;</span>
+            case &quot;New Game&quot;:
+<span class="fc" id="L46">                model.getTableModel().newGame();</span>
+<span class="fc" id="L47">                break;</span>
+            case &quot;Board Size-Small&quot;:
+<span class="fc" id="L49">                model.getTableModel().setSize(k_SMALL);</span>
+<span class="fc" id="L50">                model.getTableModel().newGame();</span>
+<span class="fc" id="L51">                break;</span>
+            case &quot;Board Size-Medium&quot;:
+<span class="fc" id="L53">                model.getTableModel().setSize(k_MEDIUM);</span>
+<span class="fc" id="L54">                model.getTableModel().newGame();</span>
+<span class="fc" id="L55">                break;</span>
+            case &quot;Board Size-Large&quot;:
+<span class="fc" id="L57">                model.getTableModel().setSize(k_LARGE);</span>
+<span class="fc" id="L58">                model.getTableModel().newGame();</span>
+<span class="fc" id="L59">                break;</span>
+            case &quot;Skin-Default&quot;:
+<span class="fc" id="L61">                model.changeTheme(&quot;Default&quot;);</span>
+<span class="fc" id="L62">                break;</span>
+            case &quot;Skin-Classic&quot;:
+<span class="fc" id="L64">                model.changeTheme(&quot;Classic&quot;);</span>
+<span class="fc" id="L65">                break;</span>
+            case &quot;Skin-Night&quot;:
+<span class="fc" id="L67">                model.changeTheme(&quot;Night&quot;);</span>
+<span class="fc" id="L68">                break;</span>
+            case &quot;Undo-Undo&quot;:
+<span class="fc" id="L70">                ((PawnsTableModel)model.getTableModel()).undo();</span>
+<span class="fc" id="L71">                break;</span>
+            default:
+                break;
+        }
+<span class="fc" id="L75">        model.notifyObservers();</span>
+<span class="fc" id="L76">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

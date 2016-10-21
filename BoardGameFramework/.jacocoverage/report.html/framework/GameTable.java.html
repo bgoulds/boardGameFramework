@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GameTable.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">framework</a> &gt; <span class="el_source">GameTable.java</span></div><h1>GameTable.java</h1><pre class="source lang-java linenums">
+package framework;
+
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.JComponent;
+
+/**
+ * A JTable with a customizable background
+ * @author BrianGouldsberry
+ */
+public class GameTable extends JTable
+{
+    private Image img;
+    private String theme, game;
+    
+    /**
+     * Creates a new table and sets the background image based upon the game and
+     * theme
+     * @param model specified model to be used
+     * @param game name of the game being used
+     * @param theme name of the theme being used
+     */
+    GameTable(GameTableModel model, String game, String theme) 
+    {
+<span class="nc" id="L35">        super(model);</span>
+<span class="nc" id="L36">        this.game = game;</span>
+<span class="nc" id="L37">        this.theme = theme;</span>
+        try 
+        {
+<span class="nc" id="L40">            File file = new File(&quot;images/&quot; + game + &quot;/&quot; + theme </span>
+                    + &quot;/background.jpg&quot;);
+<span class="nc" id="L42">            img = ImageIO.read(file);</span>
+        } 
+<span class="nc" id="L44">        catch (IOException ex) </span>
+        {
+<span class="nc" id="L46">            Logger.getLogger(GameTable.class.getName()).</span>
+                    log(Level.SEVERE, null, ex);
+<span class="nc" id="L48">        }</span>
+<span class="nc" id="L49">    }</span>
+    
+    /**
+     * Sets the cells and table to be opaque, called automatically
+     * @param renderer renderer being used
+     * @param row row of the cell as an int
+     * @param column column of the cell as an int
+     * @return the cell
+     */
+    public Component prepareRenderer(TableCellRenderer renderer, int row,
+            int column)
+    {
+<span class="nc" id="L61">        Component component = super.prepareRenderer(renderer, row, column);</span>
+        // We want renderer component to be
+        // transparent so background image is visible
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        if (component instanceof JComponent)</span>
+        {
+<span class="nc" id="L66">            ((JComponent) component).setOpaque(false);</span>
+        }
+<span class="nc" id="L68">        setOpaque(false);</span>
+<span class="nc" id="L69">        return component;</span>
+    }
+
+    /**
+     * Override paint so as to show the table background
+     * @param gfx graphics being used to paint
+     */
+    public void paint(Graphics gfx)
+    {
+        // paint an image in the table background
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (img != null)</span>
+        {
+<span class="nc" id="L81">            gfx.drawImage(img, 0, 0, null, null);</span>
+        }
+        // Now let the paint do its usual work
+<span class="nc" id="L84">        super.paint(gfx);</span>
+<span class="nc" id="L85">    }</span>
+
+    /**
+     * Changes background image based upon the theme
+     * @param theme name of the directory that the theme belongs in
+     */
+    public void setTheme(String theme)
+    {
+<span class="nc" id="L93">        this.theme = theme;</span>
+        try 
+        {
+<span class="nc" id="L96">            File file = new File(&quot;images/&quot; + game + &quot;/&quot; + theme</span>
+                    + &quot;/background.jpg&quot;);
+<span class="nc" id="L98">            img = ImageIO.read(file);</span>
+        } 
+<span class="nc" id="L100">        catch (IOException ex) </span>
+        {
+<span class="nc" id="L102">            Logger.getLogger(GameTable.class.getName()).log(Level.SEVERE,</span>
+                    null, ex);
+<span class="nc" id="L104">        }</span>
+<span class="nc" id="L105">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

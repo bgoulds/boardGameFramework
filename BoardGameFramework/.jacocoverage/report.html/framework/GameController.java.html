@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GameController.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">framework</a> &gt; <span class="el_source">GameController.java</span></div><h1>GameController.java</h1><pre class="source lang-java linenums">
+package framework;
+
+import java.awt.event.MouseAdapter;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+
+/**
+ * A Mouse Controller that translates clicks into row and column values for a
+ * cell
+ * @author BrianGouldsberry
+ */
+public class GameController extends MouseAdapter
+{
+    private JTable table;
+    private GameModel model;
+    
+    /**
+     * Sets the model to be used
+     * @param model the game model to modify
+     */
+    public GameController(GameModel model)
+<span class="fc" id="L23">    {</span>
+<span class="fc" id="L24">        this.model = model;</span>
+<span class="fc" id="L25">    }</span>
+    
+    /**
+     * Sets the JTable value so that the event can figure out what cell was 
+     * clicked
+     * @param table the JTable used by the view
+     */
+    public void setTable(JTable table)
+    {
+<span class="fc" id="L34">        this.table = table;</span>
+<span class="fc" id="L35">    }</span>
+    
+    /**
+     * Returns the game model
+     * @return model
+     */
+    public GameModel getModel()
+    {
+<span class="fc" id="L43">        return model;</span>
+    }
+    
+    /**
+     * Tells the model to validate the click based off of its position in the 
+     * JTable
+     * @param evt the mouse click event
+     */
+    @Override
+    public void mouseClicked(java.awt.event.MouseEvent evt) 
+    {
+        //AS long as the table isn't null, validate the click
+<span class="fc bfc" id="L55" title="All 2 branches covered.">        if (table != null)</span>
+        {
+<span class="fc" id="L57">            int row = table.rowAtPoint(evt.getPoint());</span>
+<span class="fc" id="L58">            int col = table.columnAtPoint(evt.getPoint());</span>
+<span class="fc" id="L59">            boolean leftClick = SwingUtilities.isLeftMouseButton(evt);</span>
+<span class="fc" id="L60">            model.validateMove(row, col, leftClick);</span>
+        }
+<span class="fc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

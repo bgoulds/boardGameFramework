@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GameGUIView.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">framework</a> &gt; <span class="el_source">GameGUIView.java</span></div><h1>GameGUIView.java</h1><pre class="source lang-java linenums">
+package framework;
+
+import pawns.PawnsEnum;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.Observable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import org.ini4j.Ini;
+import org.ini4j.InvalidFileFormatException;
+import org.ini4j.Profile.Section;
+import org.ini4j.Wini;
+
+/**
+ * The GUI representation of the game framework, contains a MenuBar with options
+ * loaded from the game's ini file, a status bar to display messages, and a 
+ * JTable containing game pieces
+ * @author BrianGouldsberry
+ */
+public class GameGUIView extends JFrame implements GameView
+{
+    protected JMenuBar menu;
+    protected JMenu gameMenu;
+    protected JMenu preferencesMenu;
+    protected JPanel contentPane;
+    protected JLabel statusLabel;
+    protected GameController controller;
+    protected JTable table;
+    
+    protected ActionListener listener;
+<span class="nc" id="L48">    private String game, theme = &quot;Default&quot;;</span>
+
+    
+    /**
+     * Stes up the gui with the correct title, menu, and table contents
+     * @param listener action listener used to call menu bar events
+     * @param game string containing the game name
+     * @param model model to be used for the table
+     */
+    public GameGUIView(ActionListener listener, String game, GameModel model)
+<span class="nc" id="L58">    {</span>
+<span class="nc" id="L59">        this.listener = listener;</span>
+<span class="nc" id="L60">        this.game = game;</span>
+<span class="nc" id="L61">        setUpMenu();</span>
+<span class="nc" id="L62">        setUpContents();</span>
+<span class="nc" id="L63">        this.setTitle(game + &quot; - Brian Gouldsberry&quot;);</span>
+<span class="nc" id="L64">    }</span>
+    
+    private void setUpMenu()
+    {
+<span class="nc" id="L68">        menu = new JMenuBar();</span>
+<span class="nc" id="L69">        gameMenu = new JMenu(&quot;Game&quot;);</span>
+
+<span class="nc" id="L71">        JMenuItem quit = new JMenuItem(&quot;Quit&quot;);</span>
+<span class="nc" id="L72">        quit.setActionCommand(&quot;Quit&quot;);</span>
+<span class="nc" id="L73">        quit.addActionListener(listener);</span>
+<span class="nc" id="L74">        JMenuItem newGame = new JMenuItem(&quot;New Game&quot;);</span>
+<span class="nc" id="L75">        newGame.setActionCommand(&quot;New Game&quot;);</span>
+<span class="nc" id="L76">        newGame.addActionListener(listener);</span>
+
+<span class="nc" id="L78">        gameMenu.add(newGame);</span>
+<span class="nc" id="L79">        gameMenu.add(quit);</span>
+
+
+<span class="nc" id="L82">        preferencesMenu = new JMenu(&quot;Preferences&quot;);</span>
+
+<span class="nc" id="L84">        menu.add(gameMenu);</span>
+<span class="nc" id="L85">        menu.add(preferencesMenu);</span>
+<span class="nc" id="L86">        loadPreferences();</span>
+
+<span class="nc" id="L88">        this.setJMenuBar(menu);</span>
+<span class="nc" id="L89">    }</span>
+
+    private void setUpContents() 
+    {
+<span class="nc" id="L93">        contentPane = new JPanel();</span>
+<span class="nc" id="L94">        contentPane.setBackground(new Color(192, 192, 192));</span>
+<span class="nc" id="L95">        contentPane.setLayout(new BorderLayout());</span>
+        
+<span class="nc" id="L97">        statusLabel = new JLabel();</span>
+<span class="nc" id="L98">        statusLabel.setBackground(new Color(214, 217, 223));</span>
+<span class="nc" id="L99">        statusLabel.setForeground(new Color(0, 0, 0));</span>
+<span class="nc" id="L100">        statusLabel.setHorizontalAlignment(JLabel.CENTER);</span>
+<span class="nc" id="L101">        statusLabel.setVerticalAlignment(JLabel.TOP);</span>
+<span class="nc" id="L102">        statusLabel.setEnabled(true);</span>
+<span class="nc" id="L103">        statusLabel.setFont(new Font(&quot;DejaVu Sans&quot;, 0, 12));</span>
+<span class="nc" id="L104">        statusLabel.setVisible(true);</span>
+        
+<span class="nc" id="L106">        contentPane.add(statusLabel, BorderLayout.NORTH);</span>
+<span class="nc" id="L107">        contentPane.setVisible(true);</span>
+<span class="nc" id="L108">        this.add(contentPane);</span>
+<span class="nc" id="L109">    }</span>
+    
+    /**
+     * Loads the games ini file to populate the menu with additional options
+     */
+    @Override
+    public void loadPreferences() 
+    {
+        try 
+        {
+<span class="nc" id="L119">            Ini ini = new Ini(new File(&quot;config/&quot; + game + &quot;.ini&quot;));</span>
+            //FOR each section
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            for (String sectionName: ini.keySet()) </span>
+            {
+<span class="nc" id="L123">                JMenu sectionMenu = new JMenu(sectionName);</span>
+<span class="nc" id="L124">                Section section = ini.get(sectionName);</span>
+                //ADD the section and option as a menu item/set the listener
+<span class="nc bnc" id="L126" title="All 2 branches missed.">                for (String optionKey: section.keySet()) </span>
+                {
+<span class="nc" id="L128">                    JMenuItem option = new JMenuItem(optionKey);</span>
+<span class="nc" id="L129">                    option.setActionCommand(sectionName + &quot;-&quot; + optionKey);</span>
+<span class="nc" id="L130">                    option.addActionListener(listener);</span>
+<span class="nc" id="L131">                    sectionMenu.add(option);</span>
+<span class="nc" id="L132">                }</span>
+<span class="nc" id="L133">                preferencesMenu.add(sectionMenu);</span>
+<span class="nc" id="L134">            }</span>
+        } 
+<span class="nc" id="L136">        catch (IOException ex) </span>
+        {
+<span class="nc" id="L138">            Logger.getLogger(GameGUIView.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L139">        }</span>
+<span class="nc" id="L140">    }</span>
+
+    /**
+     * Sets the status text and then changes the theme if necessary
+     * @param obs the game model observable
+     * @param obj not used
+     */
+    @Override
+    public void update(Observable obs, Object obj) 
+    {
+        //IF the observable is a GameModel
+<span class="nc bnc" id="L151" title="All 2 branches missed.">        if (obs instanceof GameModel)</span>
+        {
+<span class="nc" id="L153">            GameModel model = (GameModel) obs;</span>
+<span class="nc" id="L154">            statusLabel.setText(model.getStatus());</span>
+            //CHANGE the theme if necessary
+<span class="nc bnc" id="L156" title="All 4 branches missed.">            if (model.getTheme() != theme &amp;&amp; model.getTheme() != null)</span>
+            {
+<span class="nc" id="L158">                theme = model.getTheme();</span>
+<span class="nc" id="L159">                ((GameTable)table).setTheme(theme);</span>
+<span class="nc" id="L160">                table.repaint();</span>
+            }
+        }
+<span class="nc" id="L163">        this.pack();</span>
+<span class="nc" id="L164">    }</span>
+    
+    /**
+     * Sets the controller 
+     * @param cont desired controller
+     */
+    @Override
+    public void setController(GameController cont)
+    {
+<span class="nc" id="L173">        this.controller = cont;</span>
+<span class="nc" id="L174">    }</span>
+    
+    /**
+     * Sets the listener
+     * @param list desired listener
+     */
+    @Override
+    public void setListener(ActionListener list)
+    {
+<span class="nc" id="L183">        listener = list;</span>
+<span class="nc" id="L184">    }</span>
+    
+    /**
+     * Gets the JTable used by the GUI
+     * @return the current table
+     */
+    public JTable getTable()
+    {
+<span class="nc" id="L192">        return table;</span>
+    }
+
+    /**
+     * Sets the Table up with the correct renderer and enum value
+     */
+    @Override
+    public void setUpBoard() 
+    {
+<span class="nc" id="L201">        GameTableModel model = controller.getModel().getTableModel();</span>
+<span class="nc" id="L202">        table = new GameTable(model, game, theme);</span>
+<span class="nc" id="L203">        table.setRowHeight(63);  // height of icon</span>
+<span class="nc" id="L204">        Class enumClass = null;</span>
+        try 
+        {
+<span class="nc" id="L207">            enumClass = Class.forName(game.toLowerCase() + &quot;.&quot; + game + &quot;Enum&quot;);</span>
+        } 
+<span class="nc" id="L209">        catch (ClassNotFoundException ex) </span>
+        {
+<span class="nc" id="L211">            Logger.getLogger(GameGUIView.class.getName()).log(Level.SEVERE, null, ex);</span>
+<span class="nc" id="L212">        }</span>
+<span class="nc" id="L213">        PieceRenderer render = new PieceRenderer(game);</span>
+<span class="nc" id="L214">        table.setDefaultRenderer(enumClass, render);</span>
+<span class="nc" id="L215">        controller.getModel().setTableCellRenderer(render);</span>
+<span class="nc" id="L216">        table.addMouseListener(controller);</span>
+<span class="nc" id="L217">        contentPane.add(table);</span>
+<span class="nc" id="L218">        this.pack();</span>
+<span class="nc" id="L219">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PawnsEnum.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">pawns</a> &gt; <span class="el_source">PawnsEnum.java</span></div><h1>PawnsEnum.java</h1><pre class="source lang-java linenums">
+package pawns;
+
+import framework.BoardSpot;
+import static hurkle.HurkleEnum.CLICKED;
+import static hurkle.HurkleEnum.UNCLICKED;
+
+/**
+ * Enum for pawns game, options to set to NONE, BLACK, or WHITE
+ * @author BrianGouldsberry
+ */
+<span class="pc" id="L12">public enum PawnsEnum implements BoardSpot</span>
+{
+    /**
+     * Option for no piece on the board
+     */
+<span class="fc" id="L17">    NONE, </span>
+    
+    /**
+     * Option for a black piece on the board
+     */
+<span class="fc" id="L22">    BLACK, </span>
+    
+    /**
+     * Option for a white piece on the board
+     */
+<span class="fc" id="L27">    WHITE;</span>
+    
+    /**
+     * finds an ascii representation of the enum
+     * @return BLACK -&gt; B
+     *         WHITE -&gt; W
+     *         NONE  -&gt; -
+     */
+    @Override
+    public String toAscii() 
+    {
+<span class="fc" id="L38">        String ret = &quot;&quot;;</span>
+        //ADD &quot;B&quot; if black
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (this == BLACK)</span>
+        {
+<span class="fc" id="L42">            ret += &quot;B&quot;;</span>
+        }
+        //ADD &quot;W&quot; if white or &quot;-&quot; if none
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        else if (this == WHITE)</span>
+        {
+<span class="fc" id="L47">            ret += &quot;W&quot;;</span>
+        }
+        else
+        {
+<span class="fc" id="L51">            ret += &quot;-&quot;;</span>
+        }
+<span class="fc" id="L53">        return ret;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>

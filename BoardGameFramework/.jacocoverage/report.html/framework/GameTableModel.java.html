@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GameTableModel.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCoverage analysis of project &quot;BoardGameFramework&quot; (powered by JaCoCo from EclEmma)</a> &gt; <a href="index.html" class="el_package">framework</a> &gt; <span class="el_source">GameTableModel.java</span></div><h1>GameTableModel.java</h1><pre class="source lang-java linenums">package framework;
+
+import hurkle.HurkleEnum;
+import javax.swing.table.AbstractTableModel;
+
+
+/**
+ * Table Model to be used for board games
+ * @author BrianGouldsberry
+ */
+<span class="fc" id="L11">public abstract class GameTableModel extends AbstractTableModel</span>
+{
+    protected BoardSpot[][] board;
+    protected String[] columnNames;
+    
+    /**
+     * Exits the program
+     */
+    public void quit()
+    {
+<span class="nc" id="L21">        System.exit(1);</span>
+<span class="nc" id="L22">    }</span>
+       
+    /**
+     * Getter for the board as a 2 dimensional array
+     * @return the board
+     */
+    public BoardSpot[][] getBoard()
+    {
+<span class="fc" id="L30">        return board;</span>
+    }
+   
+    /**
+     * getter for the number of columns
+     * @return the number of columns in the board
+     */
+    public int getColumnCount() 
+    {
+<span class="nc" id="L39">        return columnNames.length;</span>
+    }
+
+    /**
+     * getter for the number of rows
+     * @return the number of rows in the board
+     */
+    public int getRowCount() 
+    {
+<span class="nc" id="L48">        return board.length;</span>
+    }
+
+    /**
+     * getter for columnNames
+     * @param col the desired column number
+     * @return the name of the column
+     */
+    public String getColumnName(int col) 
+    {
+<span class="nc" id="L58">        return columnNames[col];</span>
+    }
+
+    /**
+     * getter for the value of a specific cell
+     * @param row the row number
+     * @param col the column number
+     * @return the BoardSpot at the given spot in the board array
+     */
+    public Object getValueAt(int row, int col) 
+    {
+<span class="nc" id="L69">        return board[row][col];</span>
+    }
+    
+    /**
+     * Resizes the board
+     * @param size the size as an int
+     */
+    public abstract void setSize(int size);
+    
+    /**
+     * Should return the Enum class that is specific to the game plugin
+     * @param c the column number
+     * @return whatever enum class the plugin uses
+     */
+    public abstract Class getColumnClass(int c);
+    
+    /**
+     * Starts a new game
+     */
+    public abstract void newGame();
+
+    /**
+     * Validates the move at a given spot
+     * @param row row number
+     * @param column column number
+     * @param leftClick if it was a left click
+     * @return the status to be displayed in the view
+     */
+    public abstract String validateMove(int row, int column, boolean leftClick);
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.6.3.201306030806</span></div></body></html>
